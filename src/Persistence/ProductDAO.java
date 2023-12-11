@@ -14,7 +14,7 @@ import java.util.Arrays;
  * @author Marc Martín
  * @author Joaquim Angas
  */
-public class ProductDAO {
+    public class ProductDAO implements ProductIF{
     private final File file;
     private final Gson gson;
 

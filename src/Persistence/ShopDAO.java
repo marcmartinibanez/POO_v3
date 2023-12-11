@@ -14,7 +14,7 @@ import java.util.Arrays;
  * @author Marc Martín
  * @author Joaquim Angas
  */
-public class ShopDAO {
+public class ShopDAO implements ShopIF {
     private final File file;
     private final Gson gson;
 
