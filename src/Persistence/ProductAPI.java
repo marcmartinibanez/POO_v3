@@ -23,6 +23,7 @@ public class ProductAPI implements ProductIF{
     public ProductAPI() throws IOException {
         api = new ApiHelper();
         gson = new Gson();
+        removeProd(-2);
     }
     /**
      * Function that indicates if the connection worked

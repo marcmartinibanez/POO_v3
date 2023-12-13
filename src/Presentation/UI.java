@@ -46,18 +46,26 @@ public class UI {
      * @param fileLoaded = Boolean that indicates if the file has been loaded correctly
      * @return Boolean that indicates if the file has been loaded correctly
      */
-    public boolean loadInitial (Boolean fileLoaded){
+    public boolean loadInitial (boolean fileLoaded, boolean api) {
         showTitle();
         System.out.println("Welcome to elCofre Digital Shopping Experiences. \n");
-        System.out.println("Verifying local files...");
-        if (!fileLoaded){
+        System.out.println("Checking API status...");
+        if (api){
             System.out.println("Starting program...");
             return false;
         }
         else{
-            System.out.println("Error: The products.json file can’t be accessed. \n");
-            System.out.println("Shutting down...");
-            return true;
+            System.out.println("Error: The API isn’t available. \n");
+            System.out.println("Verifying local files...");
+            if (!fileLoaded){
+                System.out.println("Starting program...");
+                return false;
+            }
+            else{
+                System.out.println("Error: The products.json file can’t be accessed. \n");
+                System.out.println("Shutting down...");
+                return true;
+            }
         }
     }
 

@@ -4,7 +4,7 @@ import Business.Classes.Cart;
 import Business.Classes.Product;
 import Business.Classes.Shop;
 import Business.Classes.ShopProduct;
-import Persistence.ShopDAO;
+import Persistence.ShopIF;
 
 import java.util.ArrayList;
 
@@ -17,15 +17,15 @@ import java.util.ArrayList;
  * @author Joaquim Angas
  */
 public class ShopManager {
-    private final ShopDAO shopDAO;
+    private final ShopIF shopIF;
 
     /**
      * Constructor of the class ShopManager, it contains a ShopDAO, which will write and provide
      * the shops from the json file "shops.json"
-     * @param shopDAO = ShopDAO that will write and provide the shops from the json file "shops.json"
+     * @param shopIF = ShopIF that will write and provide the shops from the json file "shops.json" or from the API
      */
-    public ShopManager(ShopDAO shopDAO) {
-        this.shopDAO = shopDAO;
+    public ShopManager(ShopIF shopIF) {
+        this.shopIF = shopIF;
     }
 
     private Cart cart = new Cart();
@@ -35,7 +35,7 @@ public class ShopManager {
      * @param shop = Shop to be written in the file "shops.json"
      */
     public void writeShopInDao (Shop shop) {
-        shopDAO.createShop(shop);
+        shopIF.createShop(shop);
     }
 
     /**
@@ -43,7 +43,7 @@ public class ShopManager {
      * @param shop = Shop to be updated in the file "shops.json"
      */
     public void updateShopDao(Shop shop) {
-        shopDAO.updateShop(shop);
+        shopIF.updateShop(shop);
     }
 
     /**
@@ -66,7 +66,7 @@ public class ShopManager {
      */
     public ArrayList<String> getShopsNames() {
         ArrayList<String> shopNames = new ArrayList<>();
-        ArrayList<Shop> shops = shopDAO.readAllShops();
+        ArrayList<Shop> shops = shopIF.readAllShops();
         for (Shop shop : shops) {
             shopNames.add(shop.getName());
         }
@@ -79,7 +79,7 @@ public class ShopManager {
      * @return boolean that indicates if the shop name is unique
      */
     public boolean unicShopName(String shopName) {
-        ArrayList<Shop> shops = shopDAO.readAllShops();
+        ArrayList<Shop> shops = shopIF.readAllShops();
         shopName = shopName.toLowerCase();
         for (Shop shop : shops) {
             if (shop.getName().toLowerCase().equals(shopName)) {
@@ -95,7 +95,7 @@ public class ShopManager {
      * @return boolean that indicates if the shop exists
      */
     public boolean checkShopExistence(String shopName) {
-        ArrayList<Shop> shops = shopDAO.readAllShops();
+        ArrayList<Shop> shops = shopIF.readAllShops();
         if (shops == null || shops.isEmpty()) {
             return false;
         }
@@ -115,7 +115,7 @@ public class ShopManager {
      * @return boolean that indicates if the product exists in the shop
      */
     public boolean checkProdExistence(String prodName, String shopName) {
-        ArrayList<Shop> shops = shopDAO.readAllShops();
+        ArrayList<Shop> shops = shopIF.readAllShops();
         if (shops == null || shops.isEmpty()) {
             return false;
         }
@@ -142,7 +142,7 @@ public class ShopManager {
      * @return Shop that contains the product added
      */
     public Shop addProductToShop(Product product, String shopName, float price) {
-        ArrayList<Shop> shops = shopDAO.readAllShops();
+        ArrayList<Shop> shops = shopIF.readAllShops();
         for (Shop shop : shops) {
             if (shop.getName().equalsIgnoreCase(shopName)) {
                 ShopProduct shopProduct = new ShopProduct(product, shopName, price);
@@ -160,7 +160,7 @@ public class ShopManager {
      */
     public ArrayList<String> getShopProductNames(String shopName) {
         ArrayList<String> productInfo = new ArrayList<>();
-        ArrayList<Shop> shops = shopDAO.readAllShops();
+        ArrayList<Shop> shops = shopIF.readAllShops();
 
         for (Shop shop : shops) {
             if (shop.getName().equalsIgnoreCase(shopName)) {
@@ -181,14 +181,14 @@ public class ShopManager {
      * @return boolean that indicates if the product has been removed from the shop
      */
     public boolean removeProductFromShop(String shopName, String productName) {
-        ArrayList<Shop> shops = shopDAO.readAllShops();
+        ArrayList<Shop> shops = shopIF.readAllShops();
 
         for (Shop shop : shops) {
             if (shop.getName().equalsIgnoreCase(shopName)) {
                 for (ShopProduct shopProduct : shop.getCatalogue()) {
                     if (shopProduct.getProduct().getName().equalsIgnoreCase(productName)) {
                         shop.getCatalogue().remove(shopProduct);
-                        shopDAO.updateShop(shop);
+                        shopIF.updateShop(shop);
                         return true;
                     }
                 }
@@ -204,7 +204,7 @@ public class ShopManager {
      */
     public ArrayList<String> shopsWithProduct(ArrayList<String> productsStrings) {
         int i = 0;
-        ArrayList<Shop> shops = shopDAO.readAllShops();
+        ArrayList<Shop> shops = shopIF.readAllShops();
         ArrayList<String> shopProducts = new ArrayList<>();
         for (Shop shop : shops) {
             if (!shop.getCatalogue().isEmpty()) {
@@ -231,7 +231,7 @@ public class ShopManager {
      */
     public ArrayList<String> getSelectedShopInfo(int position) {
         ArrayList<String> shopInfo = new ArrayList<>();
-        ArrayList<Shop> shops = shopDAO.readAllShops();
+        ArrayList<Shop> shops = shopIF.readAllShops();
         shopInfo.add(shops.get(position - 1).getName());
         shopInfo.add(String.valueOf(shops.get(position - 1).getSince()));
         shopInfo.add(shops.get(position - 1).getDescription());
@@ -245,7 +245,7 @@ public class ShopManager {
      */
     public ArrayList<String> getSelectedCatalogue(int position) {
         ArrayList<String> catalogue = new ArrayList<>();
-        ArrayList<Shop> shops = shopDAO.readAllShops();
+        ArrayList<Shop> shops = shopIF.readAllShops();
         for (ShopProduct shopProduct : shops.get(position - 1).getCatalogue()) {
             catalogue.add(shopProduct.getProduct().getName());
             catalogue.add(shopProduct.getProduct().getBrand());
@@ -261,7 +261,7 @@ public class ShopManager {
      * @param shopName = String that contains the name of the shop
      */
     public void addProductToCart(String productName, String productBrand, String shopName) {
-        ArrayList<Shop> shops = shopDAO.readAllShops();
+        ArrayList<Shop> shops = shopIF.readAllShops();
         for (Shop shop : shops) {
             for (ShopProduct shopProduct : shop.getCatalogue()) {
                 if (shopProduct.getProduct().getName().equalsIgnoreCase(productName) && shopProduct.getProduct().getBrand().equalsIgnoreCase(productBrand) && shopProduct.getShopName().equalsIgnoreCase(shopName)) {
@@ -291,7 +291,7 @@ public class ShopManager {
      * @return ArrayList of Floats that contains the total price spent in every shop
      */
     public ArrayList<Float> checkoutCart() {
-        ArrayList<Shop> shops = shopDAO.readAllShops();
+        ArrayList<Shop> shops = shopIF.readAllShops();
         ArrayList<Float> earnings = new ArrayList<>();
         float earningsTotal = 0;
         for (Shop shop : shops) {
@@ -306,7 +306,7 @@ public class ShopManager {
                 earnings.add(earningsTotal);
             }
         }
-        shopDAO.updateShops(shops);
+        shopIF.updateShops(shops);
         return earnings;
     }
 
@@ -316,7 +316,7 @@ public class ShopManager {
      */
     public ArrayList<String> getShopEarnings() {
         ArrayList<String> earnings = new ArrayList<>();
-        ArrayList<Shop> shops = shopDAO.readAllShops();
+        ArrayList<Shop> shops = shopIF.readAllShops();
 
         for (Shop shop : shops) {
             boolean shopAlreadyAdded = false;
@@ -337,7 +337,6 @@ public class ShopManager {
                 }
             }
         }
-
         return earnings;
     }
 

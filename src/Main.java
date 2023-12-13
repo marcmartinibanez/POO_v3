@@ -1,9 +1,10 @@
 import Business.ProductManager;
 import Business.ShopManager;
-import Persistence.ProductDAO;
-import Persistence.ShopDAO;
+import Persistence.*;
 import Presentation.Controller;
 import Presentation.UI;
+
+import java.io.IOException;
 
 /**
  * The application's main class, just to hold the main method.
@@ -25,13 +26,22 @@ public class Main {
     public static void main(String[] args) {
         UI ui = new UI();
 
-        ProductDAO productDAO = new ProductDAO();
-        ShopDAO shopDAO = new ShopDAO();
+        ProductIF productIF;
+        ShopIF shopIF;
+        boolean api = true;
 
-        ProductManager productManager = new ProductManager(productDAO);
-        ShopManager shopManager = new ShopManager(shopDAO);
+        try {
+            productIF = new ProductAPI();
+            shopIF = new ShopAPI();
+        } catch (Exception e) {
+            api = false;
+            productIF = new ProductDAO();
+            shopIF = new ShopDAO();
+        }
+        ProductManager productManager = new ProductManager(productIF);
+        ShopManager shopManager = new ShopManager(shopIF);
 
         Controller controller = new Controller(ui, productManager, shopManager);
-        controller.run();
+        controller.run(api);
     }
 }

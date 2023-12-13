@@ -46,8 +46,8 @@ public class Controller {
      * Function that loads the file "products.json" and returns a boolean
      * @return boolean that indicates if the file has been loaded correctly
      */
-    private boolean loadStart(){
-        if (ui.loadInitial(loadFile())){
+    private boolean loadStart(boolean api){
+        if (ui.loadInitial(loadFile(), api)){
             return true;
         }
         return false;
@@ -57,8 +57,8 @@ public class Controller {
      * Main method that contains all the logic of the program, in this function we control, and
      * we call all the functions and methods of the code.
      */
-    public void run(){
-        if (loadStart()) {
+    public void run(boolean api){
+        if (loadStart(api)) {
             return;
         }
         int option;

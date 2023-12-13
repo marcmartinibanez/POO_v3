@@ -2,7 +2,8 @@ package Business;
 
 import Business.Classes.Product;
 import Business.Classes.Review;
-import Persistence.ProductDAO;
+import Persistence.ProductIF;
+
 import java.util.ArrayList;
 
 import java.io.FileNotFoundException;
@@ -16,15 +17,15 @@ import java.io.FileNotFoundException;
  * @author Joaquim Angas
  */
 public class ProductManager {
-    private final ProductDAO productDAO;
+    private final ProductIF productIF;
 
     /**
      * Constructor of the class ProductManager, it contains a ProductDAO, which will write and provide
      * the products from the json file "products.json"
-     * @param productDAO = ProductDAO that will write and provide the products from the json file "products.json"
+     * @param productIF = ProductIF that will write and provide the products from the json file "products.json" or from the API
      */
-    public ProductManager(ProductDAO productDAO) {
-        this.productDAO = productDAO;
+    public ProductManager(ProductIF productIF) {
+        this.productIF = productIF;
     }
 
     /**
@@ -33,7 +34,7 @@ public class ProductManager {
      * @throws FileNotFoundException = Exception that indicates that the file has not been found
      */
     public boolean loadProducts() throws FileNotFoundException {
-        return productDAO.openJSon();
+        return productIF.openJSon();
     }
 
     /**
@@ -41,7 +42,7 @@ public class ProductManager {
      * @param product = Product to be written in the file "products.json"
      */
     public void writeProductInDao (Product product) {
-        productDAO.createProduct(product);
+        productIF.createProduct(product);
     }
 
     /**
@@ -49,7 +50,7 @@ public class ProductManager {
      * @param product = Product to be updated in the file "products.json"
      */
     public void updateProductDao(Product product) {
-        productDAO.updateProduct(product);
+        productIF.updateProduct(product);
     }
 
     /**
@@ -71,7 +72,7 @@ public class ProductManager {
      * @return boolean that indicates if the product name is unique
      */
     public boolean unicProductName(String productName) {
-        ArrayList<Product> products = productDAO.readAllProds();
+        ArrayList<Product> products = productIF.readAllProds();
         productName = productName.toLowerCase();
         for (Product product : products) {
             if (product.getName().toLowerCase().equals(productName)) {
@@ -113,7 +114,7 @@ public class ProductManager {
      * @param position = Integer that indicates the position of the product to be deleted
      */
     public void deleteProduct(int position) {
-        productDAO.removeProd(position - 1);
+        productIF.removeProd(position - 1);
     }
 
     /**
@@ -121,7 +122,7 @@ public class ProductManager {
      * @return ArrayList of Strings that contains the names and brands of all the products
      */
     public ArrayList<String> getListProductNames() {
-        ArrayList<Product> products = productDAO.readAllProds();
+        ArrayList<Product> products = productIF.readAllProds();
         ArrayList<String> names = new ArrayList<>();
         for (Product product : products) {
             names.add(product.getName());
@@ -136,7 +137,7 @@ public class ProductManager {
      * @return ArrayList of Strings that contains the name and brand of the product
      */
     public ArrayList<String> getSelectedProduct(int position) {
-        ArrayList<Product> products = productDAO.readAllProds();
+        ArrayList<Product> products = productIF.readAllProds();
         ArrayList<String> names = new ArrayList<>();
         names.add(products.get(position - 1).getName());
         names.add(products.get(position - 1).getBrand());
@@ -149,7 +150,7 @@ public class ProductManager {
      * @return boolean that indicates if the product exists
      */
     public boolean checkProductExistence(String prodName) {
-        ArrayList<Product> products = productDAO.readAllProds();
+        ArrayList<Product> products = productIF.readAllProds();
         if (products == null || products.isEmpty()) {
             return false;
         }
@@ -168,7 +169,7 @@ public class ProductManager {
      * @return Product that contains the product
      */
     public Product getProduct(String prodName) {
-        ArrayList<Product> products = productDAO.readAllProds();
+        ArrayList<Product> products = productIF.readAllProds();
         if (products == null || products.isEmpty()) {
             return null;
         }
@@ -187,7 +188,7 @@ public class ProductManager {
      * @return ArrayList of Strings that contains the names and brands of the products found
      */
     public ArrayList<String> productsFound(String query) {
-        ArrayList<Product> products = productDAO.readAllProds();
+        ArrayList<Product> products = productIF.readAllProds();
         ArrayList<String> names = new ArrayList<>();
         for (Product product : products) {
             if (product.getName().toLowerCase().contains(query.toLowerCase()) || product.getBrand().equals(query)) {
@@ -205,7 +206,7 @@ public class ProductManager {
      * @return ArrayList of Strings that contains the reviews of the product
      */
     public ArrayList<String> getProductReviews(String name, String brand) {
-        ArrayList<Product> products = productDAO.readAllProds();
+        ArrayList<Product> products = productIF.readAllProds();
         ArrayList<String> reviews = new ArrayList<>();
         for (Product product : products) {
             if (product.getName().equalsIgnoreCase(name) && product.getBrand().equalsIgnoreCase(brand)) {
@@ -228,7 +229,7 @@ public class ProductManager {
      * @return Product that contains the product with the review added
      */
     public Product addReviewToProduct(String productName, String productBrand,int rate, String comment) {
-        ArrayList<Product> products = productDAO.readAllProds();
+        ArrayList<Product> products = productIF.readAllProds();
         for (Product product : products) {
             if (product.getName().equalsIgnoreCase(productName) && product.getBrand().equalsIgnoreCase(productBrand)) {
                 Review review = new Review(rate, comment);
