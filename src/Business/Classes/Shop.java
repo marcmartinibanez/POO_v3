@@ -99,4 +99,16 @@ public class Shop {
     public void addProductToCatalogue(Business.Classes.ShopProduct shopProduct) {
         this.catalogue.add(shopProduct);
     }
+
+    public String getSponsorBrand() {
+        return "";
+    }
+
+    public float getLoyaltyThreshold() {
+        return 0;
+    }
+
+    public boolean isLoyal(float initialEarnings) {
+        return false;
+    }
 }

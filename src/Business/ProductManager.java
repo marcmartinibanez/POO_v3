@@ -1,12 +1,14 @@
 package Business;
 
 import Business.Classes.Product;
+import Business.Classes.ProductsTypes.General;
+import Business.Classes.ProductsTypes.Reduced;
+import Business.Classes.ProductsTypes.SuperReduced;
 import Business.Classes.Review;
 import Persistence.ProductIF;
 
-import java.util.ArrayList;
-
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 /**
  * Class ProductManager contains ProductDAO, and it contains all the functions
@@ -63,7 +65,16 @@ public class ProductManager {
      */
     public Product createProduct(String name, String brand, float mrp, String category) {
         ArrayList<Review> reviews= new ArrayList<>();
-        return new Product(name, brand, mrp, category, reviews);
+        if (category.equalsIgnoreCase("Superreduced Taxes")) {
+            return new SuperReduced(name, brand, mrp, category, reviews);
+        }
+        else if (category.equalsIgnoreCase("Reduced Taxes")) {
+            return new Reduced(name, brand, mrp, category, reviews);
+        }
+        else if (category.equalsIgnoreCase("General")) {
+            return new General(name, brand, mrp, category, reviews);
+        }
+        return null;
     }
 
     /**

@@ -245,11 +245,24 @@ public class Controller {
         }
         ui.menuCreateShop();
         char option = ui.askForChar("Please pick the shop’s business model: ");
-        String bussinessModel = transformOptionShop(option);
-        if (bussinessModel == null) {
+        String businessModel = transformOptionShop(option);
+        if (businessModel == null) {
             return;
         }
-        shopManager.writeShopInDao(shopManager.createShop(shopName, shopDescription, foundingYear, 0, bussinessModel));
+        float loyaltyThreshold = 0;
+        if (businessModel.equals("Loyalty")) {
+            loyaltyThreshold = ui.askForFloat("Please enter the shop’s loyalty threshold: ");
+            if (loyaltyThreshold < 0){
+                ui.showMessage("That's not good for the shop. Enter a positive number!\n");
+                return;
+            }
+        }
+        String sponsorBrand = "";
+        if (businessModel.equals("Sponsored")) {
+            sponsorBrand = ui.askForString("Please enter the shop’s sponsoring brand: ");
+            sponsorBrand = productManager.transformFormat(sponsorBrand);
+        }
+        shopManager.writeShopInDao(shopManager.createShop(shopName, shopDescription, foundingYear, 0, businessModel, loyaltyThreshold, sponsorBrand));
         ui.shopCreated(shopName);
     }
 

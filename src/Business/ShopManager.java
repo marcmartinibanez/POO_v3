@@ -4,6 +4,8 @@ import Business.Classes.Cart;
 import Business.Classes.Product;
 import Business.Classes.Shop;
 import Business.Classes.ShopProduct;
+import Business.Classes.ShopsTypes.Loyalty;
+import Business.Classes.ShopsTypes.Sponsored;
 import Persistence.ShopIF;
 
 import java.util.ArrayList;
@@ -55,9 +57,18 @@ public class ShopManager {
      * @param businessModel = String that contains the business model of the shop
      * @return Shop that contains all the information of the shop
      */
-    public Shop createShop(String name, String description, int since, float earnings, String businessModel) {
+    public Shop createShop(String name, String description, int since, float earnings, String businessModel, float loyaltyThreshold, String sponsorBrand) {
         ArrayList<ShopProduct> products = new ArrayList<>();
-        return new Shop(name, description, since, earnings, businessModel, products);
+        if (businessModel.equalsIgnoreCase("Loyalty")) {
+            return new Loyalty(name, description, since, earnings, businessModel, products, loyaltyThreshold);
+        }
+        else if (businessModel.equalsIgnoreCase("Sponsored")) {
+            return new Sponsored(name, description, since, earnings, businessModel, products, sponsorBrand);
+        }
+        else if (businessModel.equalsIgnoreCase("Maximum Benefits")) {
+            return new Shop(name, description, since, earnings, businessModel, products);
+        }
+        return null;
     }
 
     /**
