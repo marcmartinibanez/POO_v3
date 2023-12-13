@@ -80,4 +80,13 @@ public class Product {
     public void addReview(Business.Classes.Review review) {
         this.reviews.add(review);
     }
+
+    public int returnIva(){
+        return 0;
+    }
+
+    public float getOriginalPrice(float totalPrice){
+        float iva = ((float) returnIva() / 100) + 1;
+        return (totalPrice / iva);
+    }
 }
