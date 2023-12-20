@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @author Joaquim Angas
  */
 public class Cart {
-    ArrayList<Business.Classes.ShopProduct> products;
+    ArrayList<ShopProduct> products;
 
     /**
      * Constructor of the class Cart
@@ -23,7 +23,7 @@ public class Cart {
      * function that adds a product to the cart
      * @param product = ShopProduct that is going to be added to the cart
      */
-    public void addProduct(Business.Classes.ShopProduct product) {
+    public void addProduct(ShopProduct product) {
         this.products.add(product);
     }
 
@@ -31,7 +31,7 @@ public class Cart {
      * function that removes a product from the cart
      * @return ArrayList of ShopProduct that contains the products in the cart
      */
-    public ArrayList<Business.Classes.ShopProduct> getProducts() {
+    public ArrayList<ShopProduct> getProducts() {
         return products;
     }
 }

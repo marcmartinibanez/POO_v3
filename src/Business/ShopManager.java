@@ -209,6 +209,28 @@ public class ShopManager {
     }
 
     /**
+     * function that removes the product from all the shop's catalogue
+     * @param productName = String that contains the name of the product
+     */
+    public void removeProductFromAllShops(String productName) {
+        ArrayList<Shop> shops = shopIF.readAllShops();
+        for (Shop shop : shops) {
+            if (shop.getCatalogue() != null) {
+                ArrayList<ShopProduct> toRemove = new ArrayList<>();
+                for (ShopProduct shopProduct : shop.getCatalogue()) {
+                    if (shopProduct.getProduct() != null && shopProduct.getProduct().getName().equalsIgnoreCase(productName)) {
+                        toRemove.add(shopProduct);
+                    }
+                }
+                shop.getCatalogue().removeAll(toRemove);
+                if (!toRemove.isEmpty()) {
+                    shopIF.updateShop(shop);
+                }
+            }
+        }
+    }
+
+    /**
      * function that returns information about all the products from all the shops
      * @param productsStrings = ArrayList of Strings that contains the product names, shops names and prices of the products
      * @return ArrayList of Strings that contains the product names, shops names and prices of the products
@@ -309,7 +331,8 @@ public class ShopManager {
             earningsTotal = 0;
             for (int j = 0; j < cart.getProducts().size(); j++) {
                 if (cart.getProducts().get(j).getShopName().equalsIgnoreCase(shop.getName())) {
-                    shop.setEarnings(shop.getEarnings() + cart.getProducts().get(j).getShopPrice());
+                    float priceWithoutIVA = cart.getProducts().get(j).getProduct().getOriginalPrice(cart.getProducts().get(j).getShopPrice());
+                    shop.setEarnings(shop.getEarnings() + priceWithoutIVA);
                     earningsTotal = earningsTotal + cart.getProducts().get(j).getShopPrice();
                 }
             }

@@ -81,12 +81,11 @@ public class Product {
         this.reviews.add(review);
     }
 
-    public int returnIva(){
-        return 0;
-    }
-
+    /**
+     * function that returns the price without IVA of a Product
+     * @return Integer that contains the price that is being sold in the shop
+     */
     public float getOriginalPrice(float totalPrice){
-        float iva = ((float) returnIva() / 100) + 1;
-        return (totalPrice / iva);
+        return 0;
     }
 }

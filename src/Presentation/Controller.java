@@ -185,6 +185,7 @@ public class Controller {
             ui.confirmDeleteProduct(selectedProduct);
             confirm = ui.askForString(" ");
             if (confirm.equalsIgnoreCase("yes")) {
+                shopManager.removeProductFromAllShops(selectedProduct.getFirst());
                 productManager.deleteProduct(position);
                 ui.productDeleted(selectedProduct);
             }

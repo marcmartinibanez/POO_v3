@@ -8,7 +8,9 @@ public class General extends Product {
     public General(String name, String brand, float mrp, String category, ArrayList<Review> reviews) {
         super(name, brand, mrp, category, reviews);
     }
-    public int returnIva() {
-        return 21;
+
+    public float getOriginalPrice(float totalPrice){
+        float iva = ((float) 21 / 100) + 1;
+        return (totalPrice / iva);
     }
 }

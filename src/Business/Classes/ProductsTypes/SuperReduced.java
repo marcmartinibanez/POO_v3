@@ -9,12 +9,16 @@ public class SuperReduced extends Product {
     public SuperReduced(String name, String brand, float mrp, String category, ArrayList<Review> reviews) {
         super(name, brand, mrp, category, reviews);
     }
-    public int returnIva (){
+
+    public float getOriginalPrice(float totalPrice){
+        float iva1;
         if (getMrp() > 100){
-            return 0;
+            iva1 = 0;
         }
         else{
-            return 4;
+            iva1 = 4;
         }
+        float iva = (iva1 / 100) + 1;
+        return (totalPrice / iva);
     }
 }
