@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * @author Joaquim Angas
  */
 public class Controller {
-    private UI ui;
+    private final UI ui;
     private final ProductManager productManager;
     private final ShopManager shopManager;
 
@@ -47,10 +47,7 @@ public class Controller {
      * @return boolean that indicates if the file has been loaded correctly
      */
     private boolean loadStart(boolean api){
-        if (ui.loadInitial(loadFile(), api)){
-            return true;
-        }
-        return false;
+        return ui.loadInitial(loadFile(), api);
     }
 
     /**
@@ -157,17 +154,15 @@ public class Controller {
      */
     private String transformOptionProduct(char option) {
         option = Character.toUpperCase(option);
-        switch (option){
-            case 'A':
-                return "General";
-            case 'B':
-                return "Reduced Taxes";
-            case 'C':
-                return "Superreduced Taxes";
-            default:
+        return switch (option) {
+            case 'A' -> "General";
+            case 'B' -> "Reduced Taxes";
+            case 'C' -> "Superreduced Taxes";
+            default -> {
                 ui.showMessage("Invalid option");
-                return null;
-        }
+                yield null;
+            }
+        };
     }
 
     /**
@@ -273,17 +268,15 @@ public class Controller {
      */
     private String transformOptionShop(char option) {
         option = Character.toUpperCase(option);
-        switch (option) {
-            case 'A':
-                return "Maximum Benefits";
-            case 'B':
-                return "Loyalty";
-            case 'C':
-                return "Sponsored";
-            default:
+        return switch (option) {
+            case 'A' -> "Maximum Benefits";
+            case 'B' -> "Loyalty";
+            case 'C' -> "Sponsored";
+            default -> {
                 ui.showMessage("Invalid option");
-                return null;
-        }
+                yield null;
+            }
+        };
     }
 
     /**
@@ -421,7 +414,7 @@ public class Controller {
      * method that lists the shops, it shows the shops and it asks the user for function to be executed for a specific product
      */
     private void listShops() {
-        int option = 0;
+        int option;
         ArrayList<String> shopNames = shopManager.getShopsNames();
         ui.listShops(shopNames);
         int positionShop = ui.askForInteger("Which catalogue do you want to see? ");
@@ -446,7 +439,7 @@ public class Controller {
             }
             String productName = catalogue.get(((positionProduct - 1) * 3));
             String productBrand = catalogue.get(((positionProduct - 1) * 3) + 1);
-            String shopName = shopInfo.get(0);
+            String shopName = shopInfo.getFirst();
             ui.catalogueMenu();
             option = ui.askForInteger("Choose an option: ");
             if (option <= 0 || option > 3) {

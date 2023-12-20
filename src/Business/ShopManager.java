@@ -30,7 +30,7 @@ public class ShopManager {
         this.shopIF = shopIF;
     }
 
-    private Cart cart = new Cart();
+    private final Cart cart = new Cart();
 
     /**
      * method that writes a shop in the file "shops.json"
@@ -214,7 +214,7 @@ public class ShopManager {
      * @return ArrayList of Strings that contains the product names, shops names and prices of the products
      */
     public ArrayList<String> shopsWithProduct(ArrayList<String> productsStrings) {
-        int i = 0;
+        int i;
         ArrayList<Shop> shops = shopIF.readAllShops();
         ArrayList<String> shopProducts = new ArrayList<>();
         for (Shop shop : shops) {
@@ -304,7 +304,7 @@ public class ShopManager {
     public ArrayList<Float> checkoutCart() {
         ArrayList<Shop> shops = shopIF.readAllShops();
         ArrayList<Float> earnings = new ArrayList<>();
-        float earningsTotal = 0;
+        float earningsTotal;
         for (Shop shop : shops) {
             earningsTotal = 0;
             for (int j = 0; j < cart.getProducts().size(); j++) {

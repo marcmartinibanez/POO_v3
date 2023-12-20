@@ -33,12 +33,14 @@ public class UI {
      * method that displays the header of the Program and the loading data message
      */
     private void showTitle(){
-        System.out.println("\n" +
-                "        ________      ____        \n" +
-                "  ___  / / ____/___  / __/_______ \n" +
-                " / _ \\/ / /   / __ \\/ /_/ ___/ _ \\\n" +
-                "/  __/ / /___/ /_/ / __/ /  /  __/\n" +
-                "\\___/_/\\____/\\____/_/ /_/   \\___/ \n");
+        System.out.println("""
+
+                        ________      ____       \s
+                  ___  / / ____/___  / __/_______\s
+                 / _ \\/ / /   / __ \\/ /_/ ___/ _ \\
+                /  __/ / /___/ /_/ / __/ /  /  __/
+                \\___/_/\\____/\\____/_/ /_/   \\___/\s
+                """);
     }
 
     /**
@@ -174,9 +176,9 @@ public class UI {
         System.out.println();
         System.out.println("The system supports the following product categories:");
         System.out.println();
-        System.out.println("A) General");
-        System.out.println("B) Reduced Taxes");
-        System.out.println("C) Superreduced Taxes");
+        System.out.println("\tA) General");
+        System.out.println("\tB) Reduced Taxes");
+        System.out.println("\tC) Superreduced Taxes");
         System.out.println();
     }
 
@@ -259,7 +261,7 @@ public class UI {
      */
     public void shopCreated(String name){
         System.out.println();
-        System.out.println("\"" + name +  "\"is now a part of the elCofre family.");
+        System.out.println("\"" + name +  "\" is now a part of the elCofre family.");
     }
 
     /**
@@ -268,12 +270,12 @@ public class UI {
      * @param shops = ArrayList that contains the names of the shops and the products with their prices
      */
     public void productsFound(ArrayList<String> products, ArrayList<String> shops) {
-        int i = 0, flagIsSold = 0;
+        int i = 0, flagIsSold;
         System.out.println();
         System.out.println("The following products where found:");
         System.out.println();
 
-        if (products.size() == 0) {
+        if (products.isEmpty()) {
             System.out.println("\tNo products where found!");
         }
         else{

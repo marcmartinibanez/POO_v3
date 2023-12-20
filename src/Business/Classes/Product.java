@@ -11,11 +11,11 @@ import java.util.ArrayList;
  * @author Joaquim Angas
  */
 public class Product {
-    private String name;
-    private String brand;
-    private float mrp;
-    private String category;
-    private ArrayList<Business.Classes.Review> reviews;
+    private final String name;
+    private final String brand;
+    private final float mrp;
+    private final String category;
+    private final ArrayList<Review> reviews;
 
     /**
      * Constructor of the Class Product

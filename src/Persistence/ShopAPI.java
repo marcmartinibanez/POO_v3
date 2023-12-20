@@ -24,8 +24,26 @@ public class ShopAPI implements ShopIF {
     public ShopAPI() throws IOException {
         api = new ApiHelper();
         gson = new Gson();
+        //removeAllShop();
     }
 
+    /**
+     * method that writes the shops to the API
+     * @param shops = Arraylist with all the shops that are meant to be written
+     */
+    private void writeAllShops(ArrayList<Shop> shops) {
+        try{
+            ArrayList<Shop> allShops = readAllShops();
+            for (int j = 0; j < allShops.size(); j++) {
+                removeShop(0);
+            }
+            for (Shop shop : shops) {
+                api.postToUrl(url, gson.toJson(shop));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
      * Function that reads the shops from the API
      * @return ArrayList with all the shops stored.
@@ -55,30 +73,51 @@ public class ShopAPI implements ShopIF {
      * method that updates a Shop in the API
      * @param updateShop = Shop to be updated
      */
+    @Override
     public void updateShop(Shop updateShop) {
-        try {
-            ArrayList<Shop> existingShops = readAllShops();
-            if (existingShops == null || existingShops.isEmpty()) {
-                return;
-            }
-            for (int i = 0; i < existingShops.size(); i++) {
-                Shop shop = existingShops.get(i);
-                if (shop.getName().equals(updateShop.getName())) {
-                    existingShops.set(i, updateShop);
-                    break;
-                }
-            }
-            api.postToUrl(url, gson.toJson(existingShops));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        ArrayList<Shop> existingShops = readAllShops();
+        if (existingShops == null || existingShops.isEmpty()) {
+            return;
         }
+        for (int i = 0; i < existingShops.size(); i++) {
+            Shop shop = existingShops.get(i);
+            if (shop.getName().equals(updateShop.getName())) {
+                existingShops.set(i, updateShop);
+                break;
+            }
+        }
+        writeAllShops(existingShops);
     }
 
+    /**
+     * method that updates all the Shops in the API
+     * @param updateShops = ArrayList of shops to be updated in the API
+     */
     public void updateShops(ArrayList<Shop> updateShops) {
         try {
             api.postToUrl(url, gson.toJson(updateShops));
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * method that removes a Shop from the API
+     * @param i = Position of the Shop to be deleted
+     */
+    public void removeShop(int i) {
+        String url1 = url + "/" + i;
+        try {
+            api.deleteFromUrl(url1);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    //FUNCION TEMPORAL PARA BORRAR TODOS LOS SHOPS
+    public void removeAllShop() throws IOException {
+        for (int i = 0; i < 10; i++) {
+            String url1 = url + "/" + i;
+            api.deleteFromUrl(url1);
         }
     }
 }

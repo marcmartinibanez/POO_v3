@@ -11,12 +11,12 @@ import java.util.ArrayList;
  */
 public class Shop {
 
-    private String name;
-    private String description;
-    private int since;
+    private final String name;
+    private final String description;
+    private final int since;
     private float earnings;
-    private String businessModel;
-    private ArrayList<Business.Classes.ShopProduct> catalogue;
+    private final String businessModel;
+    private final ArrayList<ShopProduct> catalogue;
 
     /**
      * Constructor of the Class Shop

@@ -24,7 +24,27 @@ public class ProductAPI implements ProductIF{
         api = new ApiHelper();
         gson = new Gson();
         removeProd(-2);
+        //removeAllProds();
     }
+
+    /**
+     * method that writes the products to the API
+     * @param products = Arraylist with all the products that are meant to be written
+     */
+    private void writeAllProds(ArrayList<Product> products) {
+        try{
+            ArrayList<Product> allProds = readAllProds();
+            for (int j = 0; j < allProds.size(); j++) {
+                removeProd(0);
+            }
+            for (Product product : products) {
+                api.postToUrl(url, gson.toJson(product));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * Function that indicates if the connection worked
      * @return boolean that indicates if the API connected well.
@@ -78,21 +98,24 @@ public class ProductAPI implements ProductIF{
      * @param updateProduct = Product to be updated
      */
     public void updateProduct(Product updateProduct) {
-        try {
-            ArrayList<Product> existingProds = readAllProds();
-            if (existingProds == null || existingProds.isEmpty()) {
-                return;
+        ArrayList<Product> existingProds = readAllProds();
+        if (existingProds == null || existingProds.isEmpty()) {
+            return;
+        }
+        for (int i = 0; i < existingProds.size(); i++) {
+            Product product = existingProds.get(i);
+            if (product.getName().equals(updateProduct.getName())) {
+                existingProds.set(i, updateProduct);
+                break;
             }
-            for (int i = 0; i < existingProds.size(); i++) {
-                Product product = existingProds.get(i);
-                if (product.getName().equals(updateProduct.getName())) {
-                    existingProds.set(i, updateProduct);
-                    break;
-                }
-            }
-            api.postToUrl(url, gson.toJson(existingProds));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        }
+        writeAllProds(existingProds);
+    }
+
+    public void removeAllProds() throws IOException {
+        for (int i = 0; i < 10; i++) {
+            String url1 = url + "/" + i;
+            api.deleteFromUrl(url1);
         }
     }
 }

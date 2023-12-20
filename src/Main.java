@@ -4,8 +4,6 @@ import Persistence.*;
 import Presentation.Controller;
 import Presentation.UI;
 
-import java.io.IOException;
-
 /**
  * The application's main class, just to hold the main method.
  *
