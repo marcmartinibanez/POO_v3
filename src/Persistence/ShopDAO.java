@@ -1,6 +1,12 @@
 package Persistence;
 
+import Business.Classes.Product;
+import Business.Classes.ProductsTypes.General;
+import Business.Classes.ProductsTypes.Reduced;
+import Business.Classes.ProductsTypes.SuperReduced;
 import Business.Classes.Shop;
+import Business.Classes.ShopsTypes.Loyalty;
+import Business.Classes.ShopsTypes.Sponsored;
 import com.google.gson.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -46,12 +52,38 @@ public class ShopDAO implements ShopIF {
      * @return Shops ArrayList that contains all the Shops in the file "shops.json"
      */
     public ArrayList<Shop> readAllShops() {
+        Gson gson = new Gson();
+        JsonParser parser = new JsonParser();
+        ArrayList<Shop> shops = new ArrayList<>();
+
         try {
-            FileReader shopReader = new FileReader("files/shops.json");
-            return new ArrayList<>(Arrays.asList(gson.fromJson(shopReader, Shop[].class)));
-        } catch (FileNotFoundException e) {
-            return new ArrayList<>();
+            FileReader reader = new FileReader("files/shops.json");
+            JsonElement json = parser.parse(reader);
+            JsonArray jsonArray = json.getAsJsonArray();
+
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
+                String businessModel = jsonObject.get("businessModel").getAsString();
+
+                switch (businessModel) {
+                    case "Maximum Benefits":
+                        shops.add(gson.fromJson(jsonObject, Shop.class));
+                        break;
+                    case "Loyalty":
+                        shops.add(gson.fromJson(jsonObject, Loyalty.class));
+                        break;
+                    case "Sponsored":
+                        shops.add(gson.fromJson(jsonObject, Sponsored.class));
+                        break;
+                    default:
+                        System.out.println("Invalid shop type.");
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println("An error occurred while reading shops from file: " + e.getMessage());
         }
+        return shops;
     }
 
     /**
