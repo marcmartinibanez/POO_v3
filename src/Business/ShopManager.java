@@ -333,7 +333,7 @@ public class ShopManager {
                 if (cart.getProducts().get(j).getShopName().equalsIgnoreCase(shop.getName())) {
                     float priceWithoutIVA = cart.getProducts().get(j).getProduct().getOriginalPrice(cart.getProducts().get(j).getShopPrice());
                     shop.setEarnings(shop.getEarnings() + priceWithoutIVA);
-                    earningsTotal = earningsTotal + cart.getProducts().get(j).getShopPrice();
+                    earningsTotal = earningsTotal + priceWithoutIVA;
                 }
             }
             if (earningsTotal != 0) {

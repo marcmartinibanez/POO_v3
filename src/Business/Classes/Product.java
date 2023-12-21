@@ -58,18 +58,10 @@ public class Product {
     }
 
     /**
-     * function that returns the category of a Product (Getter)
-     * @return String that contains the category
-     */
-    public String getCategory() {
-        return category;
-    }
-
-    /**
      * function that returns the reviews of a Product (Getter)
      * @return Review Arraylist that contains the reviews
      */
-    public ArrayList<Business.Classes.Review> getReviews() {
+    public ArrayList<Review> getReviews() {
         return reviews;
     }
 
@@ -77,7 +69,7 @@ public class Product {
      * function that adds a review to a Product
      * @param review = Review that will be added to a Product
      */
-    public void addReview(Business.Classes.Review review) {
+    public void addReview(Review review) {
         this.reviews.add(review);
     }
 
@@ -86,6 +78,6 @@ public class Product {
      * @return Integer that contains the price that is being sold in the shop
      */
     public float getOriginalPrice(float totalPrice){
-        return 0;
+        return totalPrice;
     }
 }

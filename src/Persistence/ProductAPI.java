@@ -4,6 +4,7 @@ import Persistence.ApiHelper.ApiHelper;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -61,7 +62,7 @@ public class ProductAPI implements ProductIF{
     @Override
     public ArrayList<Product> readAllProds() {
         try{
-            return new ArrayList<>(Arrays.asList(gson.fromJson(api.getFromUrl(url), Product[].class)));
+            return new ArrayList<>(Arrays.asList(gson.fromJson(api.getFromUrl(url), (Type) Product[].class)));
         } catch (IOException e) {
             return new ArrayList<>();
         }

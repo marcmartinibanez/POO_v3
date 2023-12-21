@@ -11,6 +11,7 @@ public class Reduced extends Product {
         super(name, brand, mrp, category, reviews);
     }
 
+    @Override
     public float getOriginalPrice(float totalPrice){
         float rate = 0, iva1;
         for (Review review : getReviews()) {

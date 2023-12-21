@@ -1,6 +1,9 @@
 package Persistence;
 
 import Business.Classes.Product;
+import Business.Classes.ProductsTypes.General;
+import Business.Classes.ProductsTypes.Reduced;
+import Business.Classes.ProductsTypes.SuperReduced;
 import com.google.gson.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -59,12 +62,38 @@ import java.util.Arrays;
      * @return Products ArrayList that contains all the Products in the file "products.json"
      */
     public ArrayList<Product> readAllProds() {
+        Gson gson = new Gson();
+        JsonParser parser = new JsonParser();
+        ArrayList<Product> products = new ArrayList<>();
+
         try {
-            FileReader prodReader = new FileReader("files/products.json");
-            return new ArrayList<>(Arrays.asList(gson.fromJson(prodReader, Product[].class)));
-        } catch (FileNotFoundException e) {
-            return new ArrayList<>();
+            FileReader reader = new FileReader("files/products.json");
+            JsonElement json = parser.parse(reader);
+            JsonArray jsonArray = json.getAsJsonArray();
+
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
+                String category = jsonObject.get("category").getAsString();
+
+                switch (category) {
+                    case "General":
+                        products.add(gson.fromJson(jsonObject, General.class));
+                        break;
+                    case "Reduced Taxes":
+                        products.add(gson.fromJson(jsonObject, Reduced.class));
+                        break;
+                    case "Superreduced Taxes":
+                        products.add(gson.fromJson(jsonObject, SuperReduced.class));
+                        break;
+                    default:
+                        System.out.println("Invalid product type.");
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println("An error occurred while reading products from file: " + e.getMessage());
         }
+        return products;
     }
 
     /**

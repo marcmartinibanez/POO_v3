@@ -9,6 +9,7 @@ public class General extends Product {
         super(name, brand, mrp, category, reviews);
     }
 
+    @Override
     public float getOriginalPrice(float totalPrice){
         float iva = ((float) 21 / 100) + 1;
         return (totalPrice / iva);

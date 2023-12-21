@@ -10,6 +10,7 @@ public class SuperReduced extends Product {
         super(name, brand, mrp, category, reviews);
     }
 
+    @Override
     public float getOriginalPrice(float totalPrice){
         float iva1;
         if (getMrp() > 100){
