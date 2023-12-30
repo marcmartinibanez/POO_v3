@@ -58,6 +58,14 @@ public class Product {
     }
 
     /**
+     * function that returns the category of a Product (Getter)
+     * @return String that contains the category
+     */
+    public String getCategory() {
+        return category;
+    }
+
+    /**
      * function that returns the reviews of a Product (Getter)
      * @return Review Arraylist that contains the reviews
      */

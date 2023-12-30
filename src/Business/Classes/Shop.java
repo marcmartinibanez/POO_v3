@@ -80,7 +80,7 @@ public class Shop {
      * function that returns the products of a Shop (Getter)
      * @return ShopProduct Arraylist that contains the products
      */
-    public ArrayList<Business.Classes.ShopProduct> getCatalogue() {
+    public ArrayList<ShopProduct> getCatalogue() {
         return catalogue;
     }
 
@@ -96,7 +96,7 @@ public class Shop {
      * function that adds a product to a Shop
      * @param shopProduct = ShopProduct that will be added to a Shop
      */
-    public void addProductToCatalogue(Business.Classes.ShopProduct shopProduct) {
+    public void addProductToCatalogue(ShopProduct shopProduct) {
         this.catalogue.add(shopProduct);
     }
 

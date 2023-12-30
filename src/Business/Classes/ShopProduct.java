@@ -1,5 +1,9 @@
 package Business.Classes;
 
+import Business.Classes.ProductsTypes.General;
+import Business.Classes.ProductsTypes.Reduced;
+import Business.Classes.ProductsTypes.SuperReduced;
+
 /**
  * Class ShopProduct contains a Product, the name of the shop that sells the product and his price
  * each Shop has a ShopProduct ArrayList
@@ -30,7 +34,16 @@ public class ShopProduct {
      * @return Product that contains the product
      */
     public Product getProduct() {
-        return product;
+        if (product.getCategory().equalsIgnoreCase("Superreduced Taxes")) {
+            return new SuperReduced(product.getName(), product.getBrand(), product.getMrp(), product.getCategory(), product.getReviews());
+        }
+        else if (product.getCategory().equalsIgnoreCase("Reduced Taxes")) {
+            return new Reduced(product.getName(), product.getBrand(), product.getMrp(), product.getCategory(), product.getReviews());
+        }
+        else if (product.getCategory().equalsIgnoreCase("General")) {
+            return new General(product.getName(), product.getBrand(), product.getMrp(), product.getCategory(), product.getReviews());
+        }
+        return null;
     }
 
     /**

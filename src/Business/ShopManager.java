@@ -331,7 +331,8 @@ public class ShopManager {
             earningsTotal = 0;
             for (int j = 0; j < cart.getProducts().size(); j++) {
                 if (cart.getProducts().get(j).getShopName().equalsIgnoreCase(shop.getName())) {
-                    float priceWithoutIVA = cart.getProducts().get(j).getProduct().getOriginalPrice(cart.getProducts().get(j).getShopPrice());
+                    float customerPrice = cart.getProducts().get(j).getShopPrice();
+                    float priceWithoutIVA = cart.getProducts().get(j).getProduct().getOriginalPrice(customerPrice);
                     shop.setEarnings(shop.getEarnings() + priceWithoutIVA);
                     earningsTotal = earningsTotal + priceWithoutIVA;
                 }
@@ -381,4 +382,9 @@ public class ShopManager {
         cart.getProducts().clear();
     }
 
+    public void yyy() {
+        for (int i = 0; i < cart.getProducts().size(); i++) {
+            System.out.println(cart.getProducts().get(i).getProduct().getOriginalPrice(100));
+        }
+    }
 }
