@@ -13,8 +13,9 @@ public class Reduced extends Product {
     }
 
     @Override
-    public float getOriginalPrice(float totalPrice){
+    public float getOriginalPrice(float totalPrice, boolean reverse) {
         float rate = 0, iva1;
+        String formattedPrice;
         for (Review review : getReviews()) {
             rate += review.getRate();
         }
@@ -25,7 +26,12 @@ public class Reduced extends Product {
             iva1 = 10;
         }
         float iva = (iva1 / 100) + 1;
-        String formattedPrice = String.format(Locale.US, "%.2f", totalPrice / iva);
+        if (!reverse) {
+            formattedPrice = String.format(Locale.US, "%.2f", totalPrice / iva);
+        }
+        else {
+            formattedPrice = String.format(Locale.US, "%.2f", totalPrice * iva);
+        }
         return Float.parseFloat(formattedPrice);
     }
 }

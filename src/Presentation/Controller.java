@@ -476,7 +476,8 @@ public class Controller {
      * method that manages the cart, it shows the menu and it calls the functions related to the cart
      */
     private void manageCart() {
-        shopManager.updateCartSponsoredShop();
+        shopManager.updateCartLoyaltyShop(false);
+        shopManager.updateCartSponsoredShop(false);
         ArrayList<String> cart = shopManager.getCart();
         if (cart.isEmpty()) {
             ui.showMessage("Your cart is empty!\n");
@@ -496,6 +497,9 @@ public class Controller {
                 clearCart();
                 break;
             case 3:
+                shopManager.clearSpentMoneyInShop();
+                shopManager.updateCartLoyaltyShop(true);
+                shopManager.updateCartSponsoredShop(true);
                 // Back
                 break;
         }
@@ -507,6 +511,7 @@ public class Controller {
     private void checkoutCart() {
         String confirm = ui.askForString("\nAre you sure you want to checkout? ");
         if (confirm.equalsIgnoreCase("yes")) {
+            shopManager.habitualClient();
             ArrayList<Float> earnings = shopManager.checkoutCart();
             ArrayList<String> shopInfo = shopManager.getShopEarnings();
             ui.checkoutCart(shopInfo, earnings);
@@ -525,6 +530,7 @@ public class Controller {
         String confirm = ui.askForString("\nAre you sure you want to clear your cart? ");
         if (confirm.equalsIgnoreCase("yes")) {
             shopManager.clearCart();
+            shopManager.clearSpentMoneyInShop();
             ui.showMessage("Your cart has been cleared!\n");
         }
         else if (!confirm.equalsIgnoreCase("no")){

@@ -11,9 +11,15 @@ public class General extends Product {
     }
 
     @Override
-    public float getOriginalPrice(float totalPrice){
+    public float getOriginalPrice(float totalPrice, boolean reverse){
         float iva = ((float) 21 / 100) + 1;
-        String formattedPrice = String.format(Locale.US, "%.2f", totalPrice / iva);
+        String formattedPrice;
+        if (!reverse) {
+            formattedPrice = String.format(Locale.US, "%.2f", totalPrice / iva);
+        }
+        else {
+            formattedPrice = String.format(Locale.US, "%.2f", totalPrice * iva);
+        }
         return Float.parseFloat(formattedPrice);
     }
 

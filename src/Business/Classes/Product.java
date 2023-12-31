@@ -85,7 +85,7 @@ public class Product {
      * function that returns the price without IVA of a Product
      * @return Integer that contains the price that is being sold in the shop
      */
-    public float getOriginalPrice(float totalPrice){
+    public float getOriginalPrice(float totalPrice, boolean reverse){
         return totalPrice;
     }
 }

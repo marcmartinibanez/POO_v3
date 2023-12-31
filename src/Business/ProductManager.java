@@ -250,11 +250,4 @@ public class ProductManager {
         }
         return null;
     }
-
-    public void xxx() {
-        ArrayList<Product> products = productIF.readAllProds();
-        for (Product product : products) {
-            System.out.println(product.getOriginalPrice(100));
-        }
-    }
 }

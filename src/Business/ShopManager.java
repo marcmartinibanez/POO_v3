@@ -32,6 +32,8 @@ public class ShopManager {
     }
 
     private final Cart cart = new Cart();
+    private ArrayList<Float> spendInShop = new ArrayList<>();
+
 
     /**
      * method that writes a shop in the file "shops.json"
@@ -332,7 +334,7 @@ public class ShopManager {
             for (int j = 0; j < cart.getProducts().size(); j++) {
                 if (cart.getProducts().get(j).getShopName().equalsIgnoreCase(shop.getName())) {
                     float customerPrice = cart.getProducts().get(j).getShopPrice();
-                    float priceWithoutIVA = cart.getProducts().get(j).getProduct().getOriginalPrice(customerPrice);
+                    float priceWithoutIVA = cart.getProducts().get(j).getProduct().getOriginalPrice(customerPrice, false);
                     float roundedPriceWithoutIVA = Float.parseFloat(String.format(Locale.US, "%.2f", priceWithoutIVA));
                     shop.setEarnings(shop.getEarnings() + roundedPriceWithoutIVA);
                     earningsTotal = earningsTotal + roundedPriceWithoutIVA;
@@ -402,16 +404,23 @@ public class ShopManager {
         return sponsoredShops;
     }
 
-    public void updateCartSponsoredShop() {
+    public void updateCartSponsoredShop(boolean reverse) {
         ArrayList<String> sponsoredShops = thereIsSponsoredShop();
         if (!sponsoredShops.isEmpty()) {
             int i = 0;
             while (i < sponsoredShops.size()) {
                 for (int j = 0; j < cart.getProducts().size(); j++) {
                     if (cart.getProducts().get(j).getShopName().equalsIgnoreCase(sponsoredShops.get(i))) {
-                        float discountedPrice = cart.getProducts().get(j).getShopPrice() * 0.9f;
-                        float roundedDiscountedPrice = Float.parseFloat(String.format(Locale.US, "%.2f", discountedPrice));
-                        cart.getProducts().get(j).setShopPrice(roundedDiscountedPrice);
+                        if (!reverse) {
+                            float discountedPrice = cart.getProducts().get(j).getShopPrice() * 0.9f;
+                            float roundedDiscountedPrice = Float.parseFloat(String.format(Locale.US, "%.2f", discountedPrice));
+                            cart.getProducts().get(j).setShopPrice(roundedDiscountedPrice);
+                        }
+                        else {
+                            float discountedPrice = cart.getProducts().get(j).getShopPrice() / 0.9f;
+                            float roundedDiscountedPrice = Float.parseFloat(String.format(Locale.US, "%.2f", discountedPrice));
+                            cart.getProducts().get(j).setShopPrice(roundedDiscountedPrice);
+                        }
                     }
                 }
                 i++;
@@ -419,10 +428,91 @@ public class ShopManager {
         }
     }
 
+    private ArrayList<Float> updateSpentMoneyInShop() {
+        ArrayList<Shop> shops = shopIF.readAllShops();
+        ArrayList<Float> spentMoneyInShop = new ArrayList<>();
+        for (int i = 0; i < shops.size(); i++) {
+            if (spendInShop.isEmpty()) {
+                spentMoneyInShop.add(0f);
+            }
+            else {
+                spentMoneyInShop.add(spendInShop.get(i));
+            }
+        }
+        for (int i = 0; i < shops.size(); i++) {
+            if (shops.get(i).getBusinessModel().equalsIgnoreCase("Loyalty")) {
+                for (int j = 0; j < cart.getProducts().size(); j++) {
+                    if (cart.getProducts().get(j).getShopName().equalsIgnoreCase(shops.get(i).getName())) {
+                        spentMoneyInShop.set(i, spentMoneyInShop.get(i) + cart.getProducts().get(j).getShopPrice());
+                    }
+                }
+            }
+        }
+        return spentMoneyInShop;
+    }
 
-    public void yyy() {
-        for (int i = 0; i < cart.getProducts().size(); i++) {
-            System.out.println(cart.getProducts().get(i).getProduct().getOriginalPrice(100));
+    private ArrayList<String> thereIsLoyaltyShop() {
+        ArrayList<Shop> shops = shopIF.readAllShops();
+        ArrayList<String> loyaltyShops = new ArrayList<>();
+        for (int i = 0; i < spendInShop.size(); i++) {
+            if (spendInShop.get(i) > 0) {
+                if (shops.get(i).getLoyaltyThreshold() <= spendInShop.get(i)) {
+                    loyaltyShops.add(shops.get(i).getName());
+                }
+            }
+        }
+        return loyaltyShops;
+    }
+
+    public void clearSpentMoneyInShop() {
+        spendInShop.replaceAll(ignored -> 0f);
+    }
+
+    public void habitualClient() {
+        ArrayList<String> loyaltyShops = thereIsLoyaltyShop();
+        ArrayList<Shop> shops = shopIF.readAllShops();
+        if (!loyaltyShops.isEmpty()) {
+            for (int i = 0; i < loyaltyShops.size(); i++) {
+                for (Shop shop : shops) {
+                    if (shop.getName().equalsIgnoreCase(loyaltyShops.get(i))) {
+                        shop.setLoyal(true);
+                    }
+                }
+            }
+        }
+        shopIF.updateShops(shops);
+    }
+
+    public void updateCartLoyaltyShop(boolean reverse) {
+        spendInShop = updateSpentMoneyInShop();
+        ArrayList<String> loyaltyShops = thereIsLoyaltyShop();
+        ArrayList<Shop> shops = shopIF.readAllShops();
+        if (!loyaltyShops.isEmpty()) {
+            int i = 0;
+            while (i < loyaltyShops.size()) {
+                for (int j = 0; j < cart.getProducts().size(); j++) {
+                    if (cart.getProducts().get(j).getShopName().equalsIgnoreCase(loyaltyShops.get(i))) {
+                        for (Shop shop : shops) {
+                            if (shop.getName().equalsIgnoreCase(loyaltyShops.get(i))) {
+                                if (shop.isLoyal()) {
+                                    if (!reverse) {
+                                        float customerPrice = cart.getProducts().get(j).getShopPrice();
+                                        float priceWithoutIVA = cart.getProducts().get(j).getProduct().getOriginalPrice(customerPrice, false);
+                                        float roundedPriceWithoutIVA = Float.parseFloat(String.format(Locale.US, "%.2f", priceWithoutIVA));
+                                        cart.getProducts().get(j).setShopPrice(roundedPriceWithoutIVA);
+                                    } else {
+                                        float customerPrice = cart.getProducts().get(j).getShopPrice();
+                                        float priceWithoutIVA = cart.getProducts().get(j).getProduct().getOriginalPrice(customerPrice, true);
+                                        float roundedPriceWithoutIVA = Float.parseFloat(String.format(Locale.US, "%.2f", priceWithoutIVA));
+                                        cart.getProducts().get(j).setShopPrice(roundedPriceWithoutIVA);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                i++;
+            }
         }
     }
 }

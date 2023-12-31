@@ -12,8 +12,9 @@ public class SuperReduced extends Product {
     }
 
     @Override
-    public float getOriginalPrice(float totalPrice){
+    public float getOriginalPrice(float totalPrice, boolean reverse){
         float iva1;
+        String formattedPrice;
         if (getMrp() > 100){
             iva1 = 0;
         }
@@ -21,7 +22,12 @@ public class SuperReduced extends Product {
             iva1 = 4;
         }
         float iva = (iva1 / 100) + 1;
-        String formattedPrice = String.format(Locale.US, "%.2f", totalPrice / iva);
+        if (!reverse) {
+            formattedPrice = String.format(Locale.US, "%.2f", totalPrice / iva);
+        }
+        else {
+            formattedPrice = String.format(Locale.US, "%.2f", totalPrice * iva);
+        }
         return Float.parseFloat(formattedPrice);
     }
 }

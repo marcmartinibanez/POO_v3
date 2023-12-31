@@ -99,16 +99,32 @@ public class Shop {
     public void addProductToCatalogue(ShopProduct shopProduct) {
         this.catalogue.add(shopProduct);
     }
-
+    /**
+     * function that returns the brand of a Shop (Getter)
+     * @return String that contains the brand
+     */
     public String getSponsorBrand() {
         return "";
     }
-
+    /**
+     * function that returns the loyalty threshold of a Shop (Getter)
+     * @return Float that contains the loyalty threshold
+     */
     public float getLoyaltyThreshold() {
         return 0;
     }
-
-    public boolean isLoyal(float initialEarnings) {
+    /**
+     * function that returns if a client is loyal in this Shop or not (Getter)
+     * @return Boolean that contains if it is or not
+     */
+    public boolean isLoyal() {
         return false;
     }
+
+    /**
+     * function that sets if a client is loyal in this Shop or not (Setter)
+     * @param loyal = Boolean that contains if it is or not
+     */
+    public void setLoyal(boolean loyal) {}
+
 }
