@@ -61,4 +61,12 @@ public class ShopProduct {
     public float getShopPrice() {
         return shopPrice;
     }
+
+    /**
+     * function that sets the product of a ShopProduct (Setter)
+     * @param shopPrice = Float that contains the price of the product
+     */
+    public void setShopPrice(float shopPrice) {
+        this.shopPrice = shopPrice;
+    }
 }

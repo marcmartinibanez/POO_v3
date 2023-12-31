@@ -4,6 +4,7 @@ import Business.Classes.Product;
 import Business.Classes.Review;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Reduced extends Product {
 
@@ -24,6 +25,7 @@ public class Reduced extends Product {
             iva1 = 10;
         }
         float iva = (iva1 / 100) + 1;
-        return (totalPrice / iva);
+        String formattedPrice = String.format(Locale.US, "%.2f", totalPrice / iva);
+        return Float.parseFloat(formattedPrice);
     }
 }

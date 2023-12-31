@@ -3,6 +3,7 @@ import Business.Classes.Product;
 import Business.Classes.Review;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class General extends Product {
     public General(String name, String brand, float mrp, String category, ArrayList<Review> reviews) {
@@ -12,6 +13,8 @@ public class General extends Product {
     @Override
     public float getOriginalPrice(float totalPrice){
         float iva = ((float) 21 / 100) + 1;
-        return (totalPrice / iva);
+        String formattedPrice = String.format(Locale.US, "%.2f", totalPrice / iva);
+        return Float.parseFloat(formattedPrice);
     }
+
 }

@@ -4,6 +4,7 @@ import Business.Classes.Product;
 import Business.Classes.Review;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class SuperReduced extends Product {
     public SuperReduced(String name, String brand, float mrp, String category, ArrayList<Review> reviews) {
@@ -20,6 +21,7 @@ public class SuperReduced extends Product {
             iva1 = 4;
         }
         float iva = (iva1 / 100) + 1;
-        return (totalPrice / iva);
+        String formattedPrice = String.format(Locale.US, "%.2f", totalPrice / iva);
+        return Float.parseFloat(formattedPrice);
     }
 }

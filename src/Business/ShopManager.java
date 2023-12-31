@@ -9,6 +9,7 @@ import Business.Classes.ShopsTypes.Sponsored;
 import Persistence.ShopIF;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Class ShopManager contains ShopDAO, and it contains all the functions
@@ -326,15 +327,15 @@ public class ShopManager {
     public ArrayList<Float> checkoutCart() {
         ArrayList<Shop> shops = shopIF.readAllShops();
         ArrayList<Float> earnings = new ArrayList<>();
-        float earningsTotal;
         for (Shop shop : shops) {
-            earningsTotal = 0;
+            float earningsTotal = 0;
             for (int j = 0; j < cart.getProducts().size(); j++) {
                 if (cart.getProducts().get(j).getShopName().equalsIgnoreCase(shop.getName())) {
                     float customerPrice = cart.getProducts().get(j).getShopPrice();
                     float priceWithoutIVA = cart.getProducts().get(j).getProduct().getOriginalPrice(customerPrice);
-                    shop.setEarnings(shop.getEarnings() + priceWithoutIVA);
-                    earningsTotal = earningsTotal + priceWithoutIVA;
+                    float roundedPriceWithoutIVA = Float.parseFloat(String.format(Locale.US, "%.2f", priceWithoutIVA));
+                    shop.setEarnings(shop.getEarnings() + roundedPriceWithoutIVA);
+                    earningsTotal = earningsTotal + roundedPriceWithoutIVA;
                 }
             }
             if (earningsTotal != 0) {
@@ -366,7 +367,7 @@ public class ShopManager {
                 for (int i = 0; i < cart.getProducts().size(); i++) {
                     if (cart.getProducts().get(i).getShopName().equalsIgnoreCase(shop.getName())) {
                         earnings.add(shop.getName());
-                        earnings.add(String.valueOf(shop.getEarnings()));
+                        earnings.add(String.valueOf(shop.getEarnings()).formatted("%.2f"));
                         break;
                     }
                 }
@@ -381,6 +382,43 @@ public class ShopManager {
     public void clearCart() {
         cart.getProducts().clear();
     }
+
+    private ArrayList<String> thereIsSponsoredShop() {
+        ArrayList<Shop> shops = shopIF.readAllShops();
+        ArrayList<String> sponsoredShops = new ArrayList<>();
+
+        for (Shop shop : shops) {
+            if (shop.getBusinessModel().equalsIgnoreCase("Sponsored")) {
+                for (int j = 0; j < cart.getProducts().size(); j++) {
+                    if (cart.getProducts().get(j).getShopName().equalsIgnoreCase(shop.getName())) {
+                        if (cart.getProducts().get(j).getProduct().getBrand().equalsIgnoreCase(shop.getSponsorBrand())) {
+                            sponsoredShops.add(shop.getName());
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return sponsoredShops;
+    }
+
+    public void updateCartSponsoredShop() {
+        ArrayList<String> sponsoredShops = thereIsSponsoredShop();
+        if (!sponsoredShops.isEmpty()) {
+            int i = 0;
+            while (i < sponsoredShops.size()) {
+                for (int j = 0; j < cart.getProducts().size(); j++) {
+                    if (cart.getProducts().get(j).getShopName().equalsIgnoreCase(sponsoredShops.get(i))) {
+                        float discountedPrice = cart.getProducts().get(j).getShopPrice() * 0.9f;
+                        float roundedDiscountedPrice = Float.parseFloat(String.format(Locale.US, "%.2f", discountedPrice));
+                        cart.getProducts().get(j).setShopPrice(roundedDiscountedPrice);
+                    }
+                }
+                i++;
+            }
+        }
+    }
+
 
     public void yyy() {
         for (int i = 0; i < cart.getProducts().size(); i++) {

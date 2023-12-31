@@ -476,6 +476,7 @@ public class Controller {
      * method that manages the cart, it shows the menu and it calls the functions related to the cart
      */
     private void manageCart() {
+        shopManager.updateCartSponsoredShop();
         ArrayList<String> cart = shopManager.getCart();
         if (cart.isEmpty()) {
             ui.showMessage("Your cart is empty!\n");
@@ -487,7 +488,6 @@ public class Controller {
             ui.showMessage("Invalid option! You must enter a number between 1 and 3\n");
             return;
         }
-
         switch (option){
             case 1:
                 checkoutCart();
