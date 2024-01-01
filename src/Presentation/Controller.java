@@ -185,7 +185,7 @@ public class Controller {
             ui.confirmDeleteProduct(selectedProduct);
             confirm = ui.askForString(" ");
             if (confirm.equalsIgnoreCase("yes")) {
-                shopManager.removeProductFromAllShops(selectedProduct.getFirst());
+                shopManager.removeProductFromAllShops(selectedProduct.get(0));
                 productManager.deleteProduct(position);
                 ui.productDeleted(selectedProduct);
             }
@@ -440,7 +440,7 @@ public class Controller {
             }
             String productName = catalogue.get(((positionProduct - 1) * 3));
             String productBrand = catalogue.get(((positionProduct - 1) * 3) + 1);
-            String shopName = shopInfo.getFirst();
+            String shopName = shopInfo.get(0);
             ui.catalogueMenu();
             option = ui.askForInteger("Choose an option: ");
             if (option <= 0 || option > 3) {

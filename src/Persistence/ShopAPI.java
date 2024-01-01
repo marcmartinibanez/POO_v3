@@ -95,11 +95,7 @@ public class ShopAPI implements ShopIF {
      * @param updateShops = ArrayList of shops to be updated in the API
      */
     public void updateShops(ArrayList<Shop> updateShops) {
-        try {
-            api.postToUrl(url, gson.toJson(updateShops));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        writeAllShops(updateShops);
     }
 
     /**
