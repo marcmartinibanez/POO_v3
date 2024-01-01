@@ -12,7 +12,11 @@ import java.util.Arrays;
 /**
  * Class that connects to the Interface with the methods of rather the API or the Json.
  * This class is the one that communicates with the API
+ * @version 18.0.2 5 January 2024
+ * @author Marc Martín
+ * @author Joaquim Angas
  */
+
 public class ShopAPI implements ShopIF {
     private final ApiHelper api;
     private static final String url = "https://balandrau.salle.url.edu/dpoo/S1-Project_99/shops";

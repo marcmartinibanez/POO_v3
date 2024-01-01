@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * Class ProductManager contains ProductDAO, and it contains all the functions
  * in charge of working and controlling everything related to the products.
  *
- * @version 18.0.2 27 November 2023
+ * @version 18.0.2 5 January 2024
  * @author Marc Martín
  * @author Joaquim Angas
  */

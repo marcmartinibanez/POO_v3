@@ -15,7 +15,7 @@ import java.util.Locale;
  * Class ShopManager contains ShopDAO, and it contains all the functions
  * in charge of working and controlling everything related to the shops.
  *
- * @version 18.0.2 27 November 2023
+ * @version 18.0.2 5 January 2024
  * @author Marc Martín
  * @author Joaquim Angas
  */
@@ -385,6 +385,10 @@ public class ShopManager {
         cart.getProducts().clear();
     }
 
+    /**
+     * function that return the names of the sponsored shops in the cart if in the cart is a product with the sponsored brand
+     * @return ArrayList of Strings that contains the names of the sponsored shops in the cart
+     */
     private ArrayList<String> thereIsSponsoredShop() {
         ArrayList<Shop> shops = shopIF.readAllShops();
         ArrayList<String> sponsoredShops = new ArrayList<>();
@@ -404,6 +408,10 @@ public class ShopManager {
         return sponsoredShops;
     }
 
+    /**
+     * function that updates the price of the products in the cart if the shop is sponsored and one product has the sponsored brand
+     * @param reverse = boolean that indicates if the price has to be updated or not
+     */
     public void updateCartSponsoredShop(boolean reverse) {
         ArrayList<String> sponsoredShops = thereIsSponsoredShop();
         if (!sponsoredShops.isEmpty()) {
@@ -428,6 +436,10 @@ public class ShopManager {
         }
     }
 
+    /**
+     * function that updates all the spent money in every shop
+     * @return ArrayList of Floats that contains all the spent money in every shop
+     */
     private ArrayList<Float> updateSpentMoneyInShop() {
         ArrayList<Shop> shops = shopIF.readAllShops();
         ArrayList<Float> spentMoneyInShop = new ArrayList<>();
@@ -451,6 +463,10 @@ public class ShopManager {
         return spentMoneyInShop;
     }
 
+    /**
+     * function that returns the names of the loyalty shops that the loyalty threshold has been reached
+     * @return ArrayList of Strings that contains the names of the loyalty shops that the loyalty threshold has been reached
+     */
     private ArrayList<String> thereIsLoyaltyShop() {
         ArrayList<Shop> shops = shopIF.readAllShops();
         ArrayList<String> loyaltyShops = new ArrayList<>();
@@ -464,10 +480,16 @@ public class ShopManager {
         return loyaltyShops;
     }
 
+    /**
+     * method that clears the spent money in every shop
+     */
     public void clearSpentMoneyInShop() {
         spendInShop.replaceAll(ignored -> 0f);
     }
 
+    /**
+     * method that sets the client as loyal if the loyalty threshold has been reached
+     */
     public void habitualClient() {
         ArrayList<String> loyaltyShops = thereIsLoyaltyShop();
         ArrayList<Shop> shops = shopIF.readAllShops();
@@ -483,6 +505,10 @@ public class ShopManager {
         shopIF.updateShops(shops);
     }
 
+    /**
+     * function that updates the price of the products in the cart if the shop is loyal and the client is loyal
+     * @param reverse = boolean that indicates if the price has to be updated or not
+     */
     public void updateCartLoyaltyShop(boolean reverse) {
         spendInShop = updateSpentMoneyInShop();
         ArrayList<String> loyaltyShops = thereIsLoyaltyShop();

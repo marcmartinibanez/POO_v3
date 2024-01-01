@@ -5,6 +5,9 @@ import java.util.ArrayList;
 
 /**
  * The Interface ShopIF contains the functions that work with the files or with the API
+ * @version 18.0.2 5 January 2024
+ * @author Marc Martín
+ * @author Joaquim Angas
  */
 public interface ShopIF{
     /**

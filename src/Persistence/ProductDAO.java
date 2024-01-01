@@ -13,7 +13,7 @@ import java.util.Arrays;
  * Class productDAO works and manages everything related to the Json
  * file in which we write and delete the products available
  *
- * @version 18.0.2 27 November 2023
+ * @version 18.0.2 5 January 2024
  * @author Marc Martín
  * @author Joaquim Angas
  */

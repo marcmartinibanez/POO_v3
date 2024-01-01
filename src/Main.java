@@ -7,7 +7,7 @@ import Presentation.UI;
 /**
  * The application's main class, just to hold the main method.
  *
- * @version 18.0.2 27 November 2023
+ * @version 18.0.2 5 January 2024
  * @author Marc Martín
  * @author Joaquim Angas
  */
